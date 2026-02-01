@@ -1,0 +1,258 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f5f7fa;
+  color: #1a1a2e;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.8rem 2rem;
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #4fc3f7;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar-links a {
+  color: #ccc;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+  background: #2a2a4a;
+  color: #fff;
+}
+
+.navbar-user {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+/* Page */
+.page {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.page h2 {
+  margin-bottom: 1.2rem;
+  color: #1a1a2e;
+}
+
+/* Form Card */
+.form-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.form-card h3 {
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.form-card input,
+.form-card select {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.form-card label {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.inline-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.inline-form input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Buttons */
+.btn-primary {
+  background: #4fc3f7;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #039be5;
+}
+
+.btn-small {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #555;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.btn-book {
+  background: #66bb6a;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-book:hover {
+  background: #43a047;
+}
+
+.btn-cancel {
+  background: #ef5350;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-cancel:hover {
+  background: #c62828;
+}
+
+/* List */
+.list {
+  margin-top: 0.5rem;
+}
+
+.list h3 {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.list-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.list-item.active {
+  border-left: 4px solid #4fc3f7;
+}
+
+.list-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sub {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  background: #e3f2fd;
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.badge-green {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-red {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Messages */
+.error {
+  color: #c62828;
+  background: #ffebee;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.success {
+  color: #2e7d32;
+  background: #e8f5e9;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.warning {
+  color: #e65100;
+  background: #fff3e0;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.empty {
+  color: #999;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
