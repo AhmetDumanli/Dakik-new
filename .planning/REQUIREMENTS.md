@@ -54,23 +54,23 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DOCK-01 | — | Pending |
-| DOCK-02 | — | Pending |
-| DOCK-03 | — | Pending |
-| DOCK-04 | — | Pending |
-| DB-01 | — | Pending |
-| DB-02 | — | Pending |
-| DB-03 | — | Pending |
-| ORCH-01 | — | Pending |
-| ORCH-02 | — | Pending |
-| ORCH-03 | — | Pending |
-| ORCH-04 | — | Pending |
+| DOCK-01 | Phase 1 | Pending |
+| DOCK-02 | Phase 1 | Pending |
+| DOCK-04 | Phase 1 | Pending |
+| DB-01 | Phase 2 | Pending |
+| DB-02 | Phase 2 | Pending |
+| DB-03 | Phase 2 | Pending |
+| DOCK-03 | Phase 3 | Pending |
+| ORCH-01 | Phase 3 | Pending |
+| ORCH-02 | Phase 3 | Pending |
+| ORCH-03 | Phase 3 | Pending |
+| ORCH-04 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️
+- Mapped to phases: 11
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-01*
-*Last updated: 2026-02-01 after initial definition*
+*Last updated: 2026-02-01 after roadmap creation*
