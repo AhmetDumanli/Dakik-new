@@ -27,10 +27,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. React frontend builds into a Docker image with nginx serving production build
   3. Docker images exclude unnecessary files via .dockerignore
   4. Image sizes are optimized (no build artifacts in final images)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (planning phase not yet complete)
+- [ ] 01-01-PLAN.md — Dockerize all 5 Java microservices (multi-stage builds with layered jars)
+- [ ] 01-02-PLAN.md — Dockerize React frontend (Vite build + nginx runtime)
 
 ### Phase 2: Database Infrastructure
 **Goal**: PostgreSQL runs in Docker with automatic database creation, seed data, and persistent storage
@@ -68,7 +69,7 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Container Images | 0/? | Not started | - |
+| 1. Container Images | 0/2 | Ready to execute | - |
 | 2. Database Infrastructure | 0/? | Not started | - |
 | 3. Orchestrated Stack | 0/? | Not started | - |
 
