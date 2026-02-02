@@ -7,10 +7,10 @@
 
 ### Dockerization
 
-- [ ] **DOCK-01**: Dockerfile for each Java microservice (multi-stage Maven build)
-- [ ] **DOCK-02**: Dockerfile for React frontend (Node build + nginx)
+- [x] **DOCK-01**: Dockerfile for each Java microservice (multi-stage Maven build)
+- [x] **DOCK-02**: Dockerfile for React frontend (Node build + nginx)
 - [ ] **DOCK-03**: docker-compose.yml orchestrating all containers
-- [ ] **DOCK-04**: .dockerignore files for each service
+- [x] **DOCK-04**: .dockerignore files for each service
 
 ### Database
 
@@ -54,9 +54,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DOCK-01 | Phase 1 | Pending |
-| DOCK-02 | Phase 1 | Pending |
-| DOCK-04 | Phase 1 | Pending |
+| DOCK-01 | Phase 1 | Complete |
+| DOCK-02 | Phase 1 | Complete |
+| DOCK-04 | Phase 1 | Complete |
 | DB-01 | Phase 2 | Pending |
 | DB-02 | Phase 2 | Pending |
 | DB-03 | Phase 2 | Pending |
