@@ -1,0 +1,39 @@
+# Build artifacts
+target/
+build/
+*.jar
+*.war
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Documentation
+README.md
+LICENSE
+*.md
+
+# Logs
+*.log
+logs/
