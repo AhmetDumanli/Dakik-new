@@ -42,10 +42,10 @@ Plans:
   2. Seed data scripts populate all 3 databases with test data
   3. Database data persists across container restarts
   4. Services can connect to databases using container hostnames
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (planning phase not yet complete)
+- [ ] 02-01-PLAN.md — PostgreSQL init scripts, seed data, and standalone compose for testing
 
 ### Phase 3: Orchestrated Stack
 **Goal**: Full stack runs with one command, services discover each other, frontend connects to backend
@@ -65,12 +65,12 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3
+Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Container Images | 2/2 | Complete | 2026-02-02 |
-| 2. Database Infrastructure | 0/? | Not started | - |
+| 2. Database Infrastructure | 0/1 | Not started | - |
 | 3. Orchestrated Stack | 0/? | Not started | - |
 
 ---
