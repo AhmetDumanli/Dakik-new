@@ -14,9 +14,9 @@
 
 ### Database
 
-- [ ] **DB-01**: PostgreSQL container with auto-creation of 3 databases (dakik_user, dakik_event, dakik_appointment)
-- [ ] **DB-02**: Seed data scripts for all 3 databases loaded on first startup
-- [ ] **DB-03**: Volume persistence for database data across restarts
+- [x] **DB-01**: PostgreSQL container with auto-creation of 3 databases (dakik_user, dakik_event, dakik_appointment)
+- [x] **DB-02**: Seed data scripts for all 3 databases loaded on first startup
+- [x] **DB-03**: Volume persistence for database data across restarts
 
 ### Orchestration
 
@@ -57,9 +57,9 @@
 | DOCK-01 | Phase 1 | Complete |
 | DOCK-02 | Phase 1 | Complete |
 | DOCK-04 | Phase 1 | Complete |
-| DB-01 | Phase 2 | Pending |
-| DB-02 | Phase 2 | Pending |
-| DB-03 | Phase 2 | Pending |
+| DB-01 | Phase 2 | Complete |
+| DB-02 | Phase 2 | Complete |
+| DB-03 | Phase 2 | Complete |
 | DOCK-03 | Phase 3 | Pending |
 | ORCH-01 | Phase 3 | Pending |
 | ORCH-02 | Phase 3 | Pending |
