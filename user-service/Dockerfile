@@ -15,7 +15,7 @@ RUN ./mvnw dependency:go-offline -B
 COPY src src
 
 # Build the application
-RUN ./mvnw clean package -DskipTests -o
+RUN ./mvnw clean package -DskipTests
 
 # Extract Spring Boot layers
 RUN java -Djarmode=tools -jar target/*.jar extract --layers --destination extracted
