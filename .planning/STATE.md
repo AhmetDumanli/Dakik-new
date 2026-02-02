@@ -10,28 +10,29 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 ## Current Position
 
 Phase: 2 of 3 (Database Infrastructure)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-02-02 — Phase 1 complete (Container Images), verified 10/10
+Plan: 1 of 1 in current phase
+Status: Phase complete
+Last activity: 2026-02-02 — Completed 02-01-PLAN.md (PostgreSQL Infrastructure)
 
-Progress: [███░░░░░░░] 33%
+Progress: [██████░░░░] 66%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 5 min
-- Total execution time: 0.17 hours
+- Total plans completed: 3
+- Average duration: 4 min
+- Total execution time: 0.22 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 2 | 10 min | 5 min |
+| 02 | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (1 min), 01-01 (9 min)
-- Trend: Ramping up
+- Last 5 plans: 02-01 (3 min), 01-02 (1 min), 01-01 (9 min)
+- Trend: Consistent velocity
 
 *Updated after each plan completion*
 
@@ -42,6 +43,9 @@ Progress: [███░░░░░░░] 33%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Numbered init scripts for execution order: PostgreSQL runs scripts alphanumerically (02-01)
+- Create tables in seed scripts: Init runs before Hibernate DDL, requires explicit CREATE TABLE (02-01)
+- Named volume for persistence: postgres-data survives stop/start, down -v enables clean reset (02-01)
 - Docker Compose over Kubernetes: Local dev only, simplicity preferred
 - Multi-stage Docker builds: Keep images small, build inside container
 - Init script for DB creation: Postgres supports /docker-entrypoint-initdb.d/ scripts
@@ -51,7 +55,6 @@ Recent decisions affecting current work:
 - Distroless Java runtime: gcr.io/distroless/java17-debian12 for minimal attack surface (01-01)
 - Maven wrapper over Maven image: Consistency with local development (01-01)
 - Spring Boot layer extraction: Optimize Docker layer caching (01-01)
-- Maven online mode: Offline mode incompatible with Spring Cloud dependency resolution (01-01)
 
 ### Pending Todos
 
@@ -64,7 +67,7 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Phase 1 complete, ready to plan Phase 2
+Stopped at: Phase 2 complete, ready for Phase 3 (Orchestration)
 Resume file: None
 
 ---
