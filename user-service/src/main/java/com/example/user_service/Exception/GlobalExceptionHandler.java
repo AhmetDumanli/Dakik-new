@@ -12,7 +12,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public String handle(EmailAlreadyExistsException ex) {
+    public String handle(EmailAlreadyExistsException ex) {return ex.getMessage();}
+
+    @ExceptionHandler(PasswordAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handle(PasswordAlreadyExistsException ex) {
         return ex.getMessage();
     }
 }
