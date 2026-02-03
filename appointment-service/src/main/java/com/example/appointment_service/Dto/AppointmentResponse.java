@@ -1,7 +1,6 @@
 package com.example.appointment_service.Dto;
 
 import com.example.appointment_service.Entity.Appointment;
-import org.h2.store.Data;
 
 import java.time.LocalDateTime;
 

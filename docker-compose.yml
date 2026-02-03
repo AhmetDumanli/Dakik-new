@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  postgres-db:
+    image: postgres:16
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+  eureka:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+
+  user-service:
+    build: ./user-service
+    depends_on:
+      - postgres-db
+      - eureka
+
+  event-service:
+    build: ./event-service
+    depends_on:
+      - postgres-db
+      - eureka
+
+  appointment-service:
+    build: ./appointment-service
+    depends_on:
+      - postgres-db
+      - eureka
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway
+
+volumes:
+  pgdata:

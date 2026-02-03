@@ -1,34 +1,12 @@
-# Builder stage
-FROM eclipse-temurin:17-jdk AS builder
-
-WORKDIR /build
-
-# Copy Maven wrapper and pom.xml for dependency caching
-COPY mvnw .
-COPY .mvn .mvn
+# 1️⃣ Build aşaması
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
 COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Download dependencies (cached layer)
-RUN ./mvnw dependency:go-offline -B
-
-# Copy source code
-COPY src src
-
-# Build the application
-RUN ./mvnw clean package -DskipTests
-
-# Extract Spring Boot layers
-RUN java -Djarmode=tools -jar target/*.jar extract --layers --destination extracted
-
-# Runtime stage
-FROM gcr.io/distroless/java17-debian12
-
-WORKDIR /application
-
-# Copy layers in order (dependencies first for better caching)
-COPY --from=builder /build/extracted/dependencies/ ./
-COPY --from=builder /build/extracted/spring-boot-loader/ ./
-COPY --from=builder /build/extracted/snapshot-dependencies/ ./
-COPY --from=builder /build/extracted/application/ ./
-
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+# 2️⃣ Çalıştırma aşaması
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
