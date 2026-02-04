@@ -9,6 +9,7 @@ public class EventResponse {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private boolean available;
+    private boolean isPublic;
 
     public Long getId() {
         return id;
@@ -50,5 +51,13 @@ public class EventResponse {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

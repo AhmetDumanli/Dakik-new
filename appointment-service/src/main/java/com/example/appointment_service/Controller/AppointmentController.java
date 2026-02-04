@@ -21,18 +21,21 @@ public class AppointmentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AppointmentResponse create(@RequestBody @Valid AppointmentCreate request) {
-        return service.create(request);
+    public AppointmentResponse create(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestBody @Valid AppointmentCreate request) {
+        return service.create(userId, request);
     }
 
-    @GetMapping("/user/{bookedBy}")
-    public List<AppointmentResponse> get(@PathVariable Long bookedBy) {
-        return service.getAppointments(bookedBy);
+    @GetMapping("/my")
+    public List<AppointmentResponse> getMyAppointments(@RequestHeader("X-User-Id") Long userId) {
+        return service.getAppointments(userId);
     }
 
-    @DeleteMapping("/{id}/user/{bookedBy}")
-    public AppointmentResponse cancel(@PathVariable Long id, @PathVariable Long bookedBy) {
-        return service.cancel(id, bookedBy);
+    @DeleteMapping("/{id}")
+    public AppointmentResponse cancel(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long id) {
+        return service.cancel(id, userId);
     }
 }
-

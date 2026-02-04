@@ -1,34 +1,30 @@
 package com.example.user_service.Service;
 
-import com.example.user_service.Dto.UserCreate;
+import com.example.user_service.Dto.ProfileUpdateRequest;
 import com.example.user_service.Dto.UserResponse;
 import com.example.user_service.Entity.User;
-import com.example.user_service.Exception.EmailAlreadyExistsException;
-import com.example.user_service.Exception.PasswordAlreadyExistsException;
 import com.example.user_service.Exception.UserNotFoundException;
+import com.example.user_service.Repository.FriendshipRepo;
 import com.example.user_service.Repository.UserRepo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private final UserRepo userRepository;
+    private final FriendshipRepo friendshipRepository;
 
-    public UserService(UserRepo userRepository) {
+    public UserService(UserRepo userRepository, FriendshipRepo friendshipRepository) {
         this.userRepository = userRepository;
+        this.friendshipRepository = friendshipRepository;
     }
 
-    public UserResponse create(UserCreate request) {
-        userRepository.findByEmail(request.getEmail())
-                .ifPresent(u -> { throw new EmailAlreadyExistsException(request.getEmail()); });
-        userRepository.findByPassword(request.getPassword())
-                .ifPresent(u -> { throw new PasswordAlreadyExistsException();});
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword()); // şimdilik plain
-
-        User saved = userRepository.save(user);
-        return mapToResponse(saved);
+    public List<UserResponse> getAll() {
+        return userRepository.findAll().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     public UserResponse getById(Long id) {
@@ -38,12 +34,38 @@ public class UserService {
         return mapToResponse(user);
     }
 
-    private UserResponse mapToResponse(User user) {
+    public UserResponse updateProfile(Long userId, ProfileUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        if (request.getName() != null) user.setName(request.getName());
+        if (request.getBio() != null) user.setBio(request.getBio());
+        if (request.getProfilePhotoUrl() != null) user.setProfilePhotoUrl(request.getProfilePhotoUrl());
+        if (request.getIsPublic() != null) user.setPublic(request.getIsPublic());
+
+        User updated = userRepository.save(user);
+        return mapToResponse(updated);
+    }
+
+    public boolean canViewUser(Long userId, Long viewerId) {
+        if (userId.equals(viewerId)) return true;
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        if (user.isPublic()) return true;
+
+        return friendshipRepository.areFriends(userId, viewerId);
+    }
+
+    UserResponse mapToResponse(User user) {
         UserResponse dto = new UserResponse();
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
+        dto.setBio(user.getBio());
+        dto.setProfilePhotoUrl(user.getProfilePhotoUrl());
+        dto.setPublic(user.isPublic());
         return dto;
     }
-
 }

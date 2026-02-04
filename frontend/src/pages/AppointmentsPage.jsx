@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { getAppointmentsByUser, cancelAppointment } from "../api";
+import { useAuth } from "../context/AuthContext";
+import { getMyAppointments, cancelAppointment } from "../api";
 
-export default function AppointmentsPage({ activeUser }) {
+export default function AppointmentsPage() {
+  const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [error, setError] = useState("");
 
   const load = async () => {
-    if (!activeUser) return;
     try {
-      const data = await getAppointmentsByUser(activeUser.id);
+      const data = await getMyAppointments();
       setAppointments(data);
     } catch {
       setAppointments([]);
@@ -17,34 +18,25 @@ export default function AppointmentsPage({ activeUser }) {
 
   useEffect(() => {
     load();
-  }, [activeUser]);
+  }, []);
 
   const handleCancel = async (appt) => {
     setError("");
     try {
-      await cancelAppointment(appt.id, appt.bookedBy);
+      await cancelAppointment(appt.id);
       load();
     } catch (err) {
       setError(err.message);
     }
   };
 
-  if (!activeUser) {
-    return (
-      <div className="page">
-        <h2>Randevular</h2>
-        <p className="warning">Randevuları görmek için bir kullanıcı seçin.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="page">
-      <h2>{activeUser.name} — Randevular</h2>
+      <h2>{user.name} — Randevular</h2>
       {error && <p className="error">{error}</p>}
 
       <div className="list">
-        {appointments.length === 0 && <p className="empty">Randevu bulunamadı.</p>}
+        {appointments.length === 0 && <p className="empty">Randevu bulunamadi.</p>}
         {appointments.map((a) => (
           <div key={a.id} className="list-item">
             <div>
@@ -55,7 +47,7 @@ export default function AppointmentsPage({ activeUser }) {
               </span>
             </div>
             {a.status === "BOOKED" && (
-              <button className="btn-cancel" onClick={() => handleCancel(a)}>İptal Et</button>
+              <button className="btn-cancel" onClick={() => handleCancel(a)}>Iptal Et</button>
             )}
           </div>
         ))}

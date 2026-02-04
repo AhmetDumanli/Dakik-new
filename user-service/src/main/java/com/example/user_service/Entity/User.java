@@ -17,8 +17,16 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
+
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    private String profilePhotoUrl;
+
+    @Column(nullable = false)
+    private boolean isPublic = true;
 
     private LocalDateTime createdAt;
 
@@ -45,6 +53,18 @@ public class User {
         return password;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -69,5 +89,17 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

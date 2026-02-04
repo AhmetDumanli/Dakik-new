@@ -1,36 +1,52 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
-import UsersPage from "./pages/UsersPage";
+import LoginPage from "./pages/LoginPage";
 import EventsPage from "./pages/EventsPage";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import "./App.css";
 
-export default function App() {
-  const [users, setUsers] = useState([]);
-  const [activeUser, setActiveUser] = useState(null);
+function ProtectedRoute({ children }) {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? children : <Navigate to="/login" />;
+}
 
+function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Navbar activeUser={activeUser} onClearUser={() => setActiveUser(null)} />
+    <>
+      <Navbar />
       <main>
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route
-            path="/users"
+            path="/events"
             element={
-              <UsersPage
-                users={users}
-                setUsers={setUsers}
-                activeUser={activeUser}
-                setActiveUser={setActiveUser}
-              />
+              <ProtectedRoute>
+                <EventsPage />
+              </ProtectedRoute>
             }
           />
-          <Route path="/events" element={<EventsPage activeUser={activeUser} />} />
-          <Route path="/appointments" element={<AppointmentsPage activeUser={activeUser} />} />
-          <Route path="*" element={<Navigate to="/users" />} />
+          <Route
+            path="/appointments"
+            element={
+              <ProtectedRoute>
+                <AppointmentsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/events" />} />
         </Routes>
       </main>
-    </BrowserRouter>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

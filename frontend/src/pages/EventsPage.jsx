@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import { createEvent, getEventsByUser, createAppointment } from "../api";
 
-export default function EventsPage({ activeUser }) {
+export default function EventsPage() {
+  const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [form, setForm] = useState({ startTime: "", endTime: "" });
   const [searchId, setSearchId] = useState("");
@@ -18,35 +20,23 @@ export default function EventsPage({ activeUser }) {
   };
 
   useEffect(() => {
-    if (activeUser) {
-      setSearchId(String(activeUser.id));
-      loadEvents(activeUser.id);
-    } else {
-      setEvents([]);
-      setSearchId("");
+    if (user) {
+      setSearchId(String(user.id));
+      loadEvents(user.id);
     }
-  }, [activeUser]);
-
-  useEffect(() => {
-    if (searchId) loadEvents(searchId);
-  }, [searchId]);
+  }, [user]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
     setError("");
-    if (!activeUser) {
-      setError("Önce bir kullanıcı seçin.");
-      return;
-    }
     try {
       await createEvent({
-        userId: activeUser.id,
         startTime: form.startTime,
         endTime: form.endTime,
       });
       setForm({ startTime: "", endTime: "" });
-      loadEvents(activeUser.id);
-      setSearchId(String(activeUser.id));
+      loadEvents(user.id);
+      setSearchId(String(user.id));
     } catch (err) {
       setError(err.message);
     }
@@ -55,55 +45,52 @@ export default function EventsPage({ activeUser }) {
   const handleBook = async (eventId) => {
     setError("");
     setSuccess("");
-    if (!activeUser) {
-      setError("Önce bir kullanıcı seçin.");
-      return;
-    }
     try {
-      await createAppointment(eventId, activeUser.id);
-      setSuccess(`Randevu oluşturuldu! (Event #${eventId})`);
+      await createAppointment(eventId);
+      setSuccess(`Randevu olusturuldu! (Event #${eventId})`);
       if (searchId) loadEvents(searchId);
     } catch (err) {
       setError(err.message);
     }
   };
 
+  const handleSearch = () => {
+    if (searchId) loadEvents(searchId);
+  };
+
   return (
     <div className="page">
       <h2>Etkinlikler</h2>
 
-      {activeUser && (
-        <form onSubmit={handleCreate} className="form-card">
-          <h3>Yeni Etkinlik ({activeUser.name} için)</h3>
-          <label>Başlangıç</label>
-          <input
-            type="datetime-local"
-            value={form.startTime}
-            onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-            required
-          />
-          <label>Bitiş</label>
-          <input
-            type="datetime-local"
-            value={form.endTime}
-            onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-            required
-          />
-          <button type="submit" className="btn-primary">Oluştur</button>
-        </form>
-      )}
-      {!activeUser && <p className="warning">Etkinlik oluşturmak için bir kullanıcı seçin.</p>}
+      <form onSubmit={handleCreate} className="form-card">
+        <h3>Yeni Etkinlik ({user.name} icin)</h3>
+        <label>Baslangic</label>
+        <input
+          type="datetime-local"
+          value={form.startTime}
+          onChange={(e) => setForm({ ...form, startTime: e.target.value })}
+          required
+        />
+        <label>Bitis</label>
+        <input
+          type="datetime-local"
+          value={form.endTime}
+          onChange={(e) => setForm({ ...form, endTime: e.target.value })}
+          required
+        />
+        <button type="submit" className="btn-primary">Olustur</button>
+      </form>
 
       <div className="form-card">
         <h3>Etkinlikleri Listele</h3>
         <div className="inline-form">
           <input
-            placeholder="Kullanıcı ID"
+            placeholder="Kullanici ID"
             type="number"
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
           />
-          <button className="btn-primary" onClick={() => searchId && loadEvents(searchId)}>Ara</button>
+          <button className="btn-primary" onClick={handleSearch}>Ara</button>
         </div>
       </div>
 
@@ -111,7 +98,7 @@ export default function EventsPage({ activeUser }) {
       {success && <p className="success">{success}</p>}
 
       <div className="list">
-        {events.length === 0 && searchId && <p className="empty">Etkinlik bulunamadı.</p>}
+        {events.length === 0 && searchId && <p className="empty">Etkinlik bulunamadi.</p>}
         {events.map((ev) => (
           <div key={ev.id} className="list-item">
             <div>
@@ -122,8 +109,8 @@ export default function EventsPage({ activeUser }) {
             </div>
             {!ev.available ? (
               <span className="badge badge-red">Dolu</span>
-            ) : activeUser && ev.userId === activeUser.id ? (
-              <span className="badge">Kendi Etkinliğin</span>
+            ) : user && ev.userId === user.id ? (
+              <span className="badge">Kendi Etkinligin</span>
             ) : (
               <button className="btn-book" onClick={() => handleBook(ev.id)}>Randevu Al</button>
             )}

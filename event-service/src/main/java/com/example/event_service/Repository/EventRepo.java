@@ -14,4 +14,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             LocalDateTime end,
             LocalDateTime start
     );
+
+    List<Event> findByIsPublicTrueAndAvailableTrue();
+
+    List<Event> findByUserIdAndIsPublicTrueAndAvailableTrue(Long userId);
 }

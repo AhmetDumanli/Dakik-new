@@ -1,12 +1,11 @@
 package com.example.user_service.Controller;
 
-import com.example.user_service.Dto.UserCreate;
+import com.example.user_service.Dto.ProfileUpdateRequest;
 import com.example.user_service.Dto.UserResponse;
 import com.example.user_service.Service.UserService;
-import jakarta.validation.Valid;
-import org.hibernate.cfg.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -17,14 +16,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse create(@Valid @RequestBody UserCreate request) {
-        return userService.create(request);
+    @GetMapping
+    public List<UserResponse> getAll() {
+        return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    public UserResponse getById(@PathVariable Long id){
+    public UserResponse getById(@PathVariable Long id) {
         return userService.getById(id);
+    }
+
+    @PutMapping("/me")
+    public UserResponse updateMyProfile(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestBody ProfileUpdateRequest request) {
+        return userService.updateProfile(userId, request);
+    }
+
+    @GetMapping("/{id}/can-view")
+    public boolean canView(@PathVariable Long id, @RequestParam Long viewerId) {
+        return userService.canViewUser(id, viewerId);
     }
 }

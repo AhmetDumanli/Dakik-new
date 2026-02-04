@@ -2,7 +2,6 @@ package com.example.event_service.Service;
 
 import com.example.event_service.Dto.EventCreate;
 import com.example.event_service.Dto.EventResponse;
-import com.example.event_service.Dto.UserDto;
 import com.example.event_service.Entity.Event;
 import com.example.event_service.Exception.*;
 import com.example.event_service.Repository.EventRepo;
@@ -25,24 +24,20 @@ public class EventService {
         this.userClient = userClient;
     }
 
-    // 1️⃣ Create Event
-    public EventResponse createEvent(EventCreate request) {
-        try{
-            userClient.getById(request.getUserId());
+    public EventResponse createEvent(Long userId, EventCreate request) {
+        try {
+            userClient.getById(userId);
+        } catch (FeignException.NotFound e) {
+            throw new UserNotFoundException(userId);
         }
 
-        catch(FeignException.NotFound e){
-            throw new UserNotFoundException(request.getUserId());
-        }
-        // ❶ Mantıksal zaman kontrolü
         if (request.getEndTime().isBefore(request.getStartTime())) {
             throw new EventException("End time cannot be before start time");
         }
 
-        // ❷ Zaman çakışması kontrolü
         boolean exists = eventRepository
                 .existsByUserIdAndStartTimeLessThanAndEndTimeGreaterThan(
-                        request.getUserId(),
+                        userId,
                         request.getEndTime(),
                         request.getStartTime()
                 );
@@ -51,19 +46,48 @@ public class EventService {
             throw new EventException("Event time overlaps with another event");
         }
 
-        // ❸ Entity oluştur
         Event event = new Event();
-        event.setUserId(request.getUserId());
+        event.setUserId(userId);
         event.setStartTime(request.getStartTime());
         event.setEndTime(request.getEndTime());
         event.setAvailable(true);
+        event.setPublic(request.getIsPublic() != null ? request.getIsPublic() : true);
 
         Event saved = eventRepository.save(event);
 
         return mapToResponse(saved);
     }
 
-    // 2️⃣ List Events by User
+    public List<EventResponse> getPublicEvents() {
+        return eventRepository.findByIsPublicTrueAndAvailableTrue()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<EventResponse> getEventsByUser(Long userId, Long viewerId) {
+        if (userId.equals(viewerId)) {
+            return eventRepository.findByUserId(userId)
+                    .stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        }
+
+        try {
+            boolean canView = userClient.canView(userId, viewerId);
+            if (!canView) {
+                throw new EventException("Cannot view this user's events. Send a friend request first.");
+            }
+        } catch (FeignException e) {
+            throw new EventException("Error checking user visibility");
+        }
+
+        return eventRepository.findByUserIdAndIsPublicTrueAndAvailableTrue(userId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     public List<EventResponse> getEventsByUser(Long userId) {
         return eventRepository.findByUserId(userId)
                 .stream()
@@ -71,14 +95,14 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public EventResponse getEventById(Long id){
-        Event event = eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-        EventResponse response = mapToResponse(event);
-        return response;
+    public EventResponse getEventById(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+        return mapToResponse(event);
     }
 
     @Transactional
-    public EventResponse lockEvent(Long id){
+    public EventResponse lockEvent(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
 
@@ -92,10 +116,10 @@ public class EventService {
         event.setLocked(true);
         eventRepository.save(event);
         return mapToResponse(event);
-
     }
+
     @Transactional
-    public EventResponse bookEvent(Long id){
+    public EventResponse bookEvent(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
 
@@ -107,8 +131,9 @@ public class EventService {
         eventRepository.save(event);
         return mapToResponse(event);
     }
+
     @Transactional
-    public EventResponse unlockEvent(Long id){
+    public EventResponse unlockEvent(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
 
@@ -118,7 +143,6 @@ public class EventService {
         return mapToResponse(event);
     }
 
-    // 3️⃣ Mapper
     private EventResponse mapToResponse(Event event) {
         EventResponse response = new EventResponse();
         response.setId(event.getId());
@@ -126,6 +150,7 @@ public class EventService {
         response.setStartTime(event.getStartTime());
         response.setEndTime(event.getEndTime());
         response.setAvailable(event.isAvailable());
+        response.setPublic(event.isPublic());
         return response;
     }
 }

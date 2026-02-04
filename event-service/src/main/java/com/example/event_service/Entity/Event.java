@@ -19,6 +19,10 @@ public class Event {
 
     private boolean available = true;
     private boolean locked = false;
+
+    @Column(nullable = false)
+    private boolean isPublic = true;
+
     //getters
     public Long getId() {
         return id;
@@ -44,6 +48,10 @@ public class Event {
         return locked;
     }
 
+    public boolean isPublic() {
+        return isPublic;
+    }
+
     //setters
     public void setId(Long id) {
         this.id = id;
@@ -67,5 +75,9 @@ public class Event {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

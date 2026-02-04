@@ -2,12 +2,9 @@ package com.example.event_service.Controller;
 
 import com.example.event_service.Dto.EventCreate;
 import com.example.event_service.Dto.EventResponse;
-import com.example.event_service.Entity.Event;
-import com.example.event_service.Repository.EventRepo;
 import com.example.event_service.Service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,20 +19,33 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    // 1️⃣ Event oluştur
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public EventResponse createEvent(@Valid @RequestBody EventCreate request) {
-        return eventService.createEvent(request);
+    @GetMapping
+    public List<EventResponse> getPublicEvents() {
+        return eventService.getPublicEvents();
     }
 
-    // 2️⃣ Kullanıcıya ait event'leri getir
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventResponse createEvent(
+            @RequestHeader("X-User-Id") Long userId,
+            @Valid @RequestBody EventCreate request) {
+        return eventService.createEvent(userId, request);
+    }
+
+    @GetMapping("/my")
+    public List<EventResponse> getMyEvents(@RequestHeader("X-User-Id") Long userId) {
+        return eventService.getEventsByUser(userId);
+    }
+
     @GetMapping("/user/{userId}")
-    public List<EventResponse> getEventsByUser(@PathVariable Long userId) {
-        return eventService.getEventsByUser(userId);}
+    public List<EventResponse> getEventsByUser(
+            @PathVariable Long userId,
+            @RequestHeader("X-User-Id") Long viewerId) {
+        return eventService.getEventsByUser(userId, viewerId);
+    }
 
     @GetMapping("/{id}")
-    public EventResponse getEvent(@PathVariable Long id){
+    public EventResponse getEvent(@PathVariable Long id) {
         return eventService.getEventById(id);
     }
 
