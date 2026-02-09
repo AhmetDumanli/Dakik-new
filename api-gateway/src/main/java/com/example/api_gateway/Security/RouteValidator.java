@@ -19,6 +19,12 @@ public class RouteValidator {
             return true;
         }
         String path = request.getURI().getPath();
+
+        // GET /events (exact) is public feed — no auth needed
+        if (request.getMethod() == HttpMethod.GET && path.equals("/events")) {
+            return true;
+        }
+
         return OPEN_ENDPOINTS.stream().anyMatch(path::startsWith);
     }
 }

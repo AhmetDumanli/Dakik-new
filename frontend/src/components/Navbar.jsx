@@ -18,6 +18,8 @@ export default function Navbar() {
           <div className="navbar-links">
             <NavLink to="/events">Etkinlikler</NavLink>
             <NavLink to="/appointments">Randevular</NavLink>
+            <NavLink to="/friends">Arkadaslar</NavLink>
+            <NavLink to="/profile">Profil</NavLink>
           </div>
           <div className="navbar-user">
             <span>{user.name}</span>

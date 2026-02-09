@@ -25,7 +25,6 @@ public class User {
 
     private String profilePhotoUrl;
 
-    @Column(nullable = false)
     private boolean isPublic = true;
 
     private LocalDateTime createdAt;

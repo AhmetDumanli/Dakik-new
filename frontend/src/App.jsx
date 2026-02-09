@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
 import EventsPage from "./pages/EventsPage";
 import AppointmentsPage from "./pages/AppointmentsPage";
+import ProfilePage from "./pages/ProfilePage";
+import FriendsPage from "./pages/FriendsPage";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
@@ -31,6 +33,22 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <AppointmentsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute>
+                <FriendsPage />
               </ProtectedRoute>
             }
           />

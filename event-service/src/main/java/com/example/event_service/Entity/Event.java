@@ -20,7 +20,6 @@ public class Event {
     private boolean available = true;
     private boolean locked = false;
 
-    @Column(nullable = false)
     private boolean isPublic = true;
 
     //getters

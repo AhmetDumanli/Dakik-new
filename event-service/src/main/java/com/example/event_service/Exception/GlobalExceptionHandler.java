@@ -43,8 +43,9 @@ public class GlobalExceptionHandler {
     // Beklenmeyen hatalar (fallback)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
+        ex.printStackTrace();
         return new ResponseEntity<>(
-                new ErrorResponse("Unexpected error occurred"),
+                new ErrorResponse("Internal error: " + ex.getClass().getSimpleName() + " - " + ex.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }

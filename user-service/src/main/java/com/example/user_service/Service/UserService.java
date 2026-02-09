@@ -9,6 +9,7 @@ import com.example.user_service.Repository.UserRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +32,14 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
+        return mapToResponse(user);
+    }
+
+    public UserResponse getByName(String name) {
+        User user = userRepository.findByName(name);
+        if (user == null) {
+            throw new UserNotFoundException(name);
+        }
         return mapToResponse(user);
     }
 

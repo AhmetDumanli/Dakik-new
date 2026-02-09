@@ -26,6 +26,9 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @GetMapping("/name/{name}")
+    public UserResponse getByName(@PathVariable String name) {return userService.getByName(name);}
+
     @PutMapping("/me")
     public UserResponse updateMyProfile(
             @RequestHeader("X-User-Id") Long userId,
