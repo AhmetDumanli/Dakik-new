@@ -12,7 +12,10 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">Dakik</div>
+      <div className="navbar-brand" onClick={() => navigate(isAuthenticated ? "/events" : "/login")}
+        style={{ cursor: "pointer" }}>
+        Dakik
+      </div>
       {isAuthenticated && (
         <>
           <div className="navbar-links">
@@ -22,8 +25,11 @@ export default function Navbar() {
             <NavLink to="/profile">Profil</NavLink>
           </div>
           <div className="navbar-user">
+            <div className="navbar-avatar">
+              {user.name?.charAt(0)?.toUpperCase()}
+            </div>
             <span>{user.name}</span>
-            <button onClick={handleLogout} className="btn-small">Cikis</button>
+            <button onClick={handleLogout} className="navbar-logout">Cikis</button>
           </div>
         </>
       )}

@@ -48,6 +48,7 @@ export default function FriendsPage() {
       await sendFriendRequest(foundUser.id);
       setSuccess("Arkadas istegi gonderildi!");
       setFriendName("");
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err.message);
     }
@@ -60,6 +61,7 @@ export default function FriendsPage() {
       await acceptFriendRequest(id);
       setSuccess("Arkadas istegi kabul edildi!");
       loadData();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err.message);
     }
@@ -72,6 +74,7 @@ export default function FriendsPage() {
       await rejectFriendRequest(id);
       setSuccess("Arkadas istegi reddedildi.");
       loadData();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err.message);
     }
@@ -84,25 +87,51 @@ export default function FriendsPage() {
       await removeFriendship(id);
       setSuccess("Arkadas kaldirildi.");
       loadData();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err.message);
     }
   }
 
-  if (loading) return <div className="page"><p>Yukleniyor...</p></div>;
+  function Avatar({ name, photoUrl, size = 44 }) {
+    if (photoUrl) {
+      return (
+        <img
+          src={photoUrl}
+          alt=""
+          style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover" }}
+        />
+      );
+    }
+    return (
+      <div className="friend-avatar-placeholder" style={{ width: size, height: size, fontSize: size * 0.4 }}>
+        {name?.charAt(0)?.toUpperCase()}
+      </div>
+    );
+  }
+
+  if (loading) return (
+    <div className="page">
+      <h2>Arkadaslar</h2>
+      <p className="sub">Yukleniyor...</p>
+    </div>
+  );
 
   return (
     <div className="page">
-      <h2>Arkadaslar</h2>
+      <div className="page-header">
+        <h2>Arkadaslar</h2>
+        {friends.length > 0 && <span className="badge">{friends.length} arkadas</span>}
+      </div>
 
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
 
-      <form onSubmit={handleSendRequest} className="form-card">
-        <h3>Arkadas Istegi Gonder</h3>
+      <form onSubmit={handleSendRequest} className="form-card friend-add-form">
+        <h3>Arkadas Ekle</h3>
         <div className="inline-form">
           <input
-            placeholder="Kullanici Adi"
+            placeholder="Kullanici adi yazin..."
             type="text"
             value={friendName}
             onChange={(e) => setFriendName(e.target.value)}
@@ -113,18 +142,24 @@ export default function FriendsPage() {
       </form>
 
       {pending.length > 0 && (
-        <div className="form-card">
-          <h3>Bekleyen Istekler ({pending.length})</h3>
-          <div className="list">
+        <div className="friend-section">
+          <h3 className="section-title">
+            Bekleyen Istekler
+            <span className="badge badge-red" style={{ marginLeft: "0.5rem" }}>{pending.length}</span>
+          </h3>
+          <div className="friend-list">
             {pending.map((req) => (
-              <div key={req.id} className="list-item">
-                <div>
-                  <strong>{req.requester.name}</strong>
-                  <span className="sub">{req.requester.email}</span>
+              <div key={req.id} className="friend-card friend-card-pending">
+                <div className="friend-card-left">
+                  <Avatar name={req.requester.name} photoUrl={req.requester.profilePhotoUrl} />
+                  <div>
+                    <strong>{req.requester.name}</strong>
+                    <span className="sub">{req.requester.email}</span>
+                  </div>
                 </div>
-                <div style={{ display: "flex", gap: "0.5rem" }}>
+                <div className="friend-card-actions">
                   <button className="btn-book" onClick={() => handleAccept(req.id)}>Kabul Et</button>
-                  <button className="btn-small" onClick={() => handleReject(req.id)}>Reddet</button>
+                  <button className="btn-secondary" onClick={() => handleReject(req.id)}>Reddet</button>
                 </div>
               </div>
             ))}
@@ -132,37 +167,28 @@ export default function FriendsPage() {
         </div>
       )}
 
-      <div className="form-card">
-        <h3>Arkadaslarim ({friends.length})</h3>
+      <div className="friend-section">
+        <h3 className="section-title">Arkadaslarim</h3>
         {friends.length === 0 ? (
-          <p className="empty">Henuz arkadasin yok.</p>
+          <div className="empty-state">
+            <div className="empty-state-icon">👥</div>
+            <p>Henuz arkadasin yok.</p>
+            <span className="sub">Yukaridaki alandan arkadas istegi gonderebilirsin.</span>
+          </div>
         ) : (
-          <div className="list">
+          <div className="friend-list">
             {friends.map((f) => {
               const friend = f.requester.id === user.id ? f.addressee : f.requester;
               return (
-                <div key={f.id} className="list-item">
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    {friend.profilePhotoUrl ? (
-                      <img
-                        src={friend.profilePhotoUrl}
-                        alt=""
-                        style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
-                      />
-                    ) : (
-                      <div style={{
-                        width: 40, height: 40, borderRadius: "50%", background: "#ddd",
-                        display: "flex", alignItems: "center", justifyContent: "center", color: "#888"
-                      }}>
-                        {friend.name?.charAt(0)?.toUpperCase()}
-                      </div>
-                    )}
+                <div key={f.id} className="friend-card">
+                  <div className="friend-card-left">
+                    <Avatar name={friend.name} photoUrl={friend.profilePhotoUrl} />
                     <div>
                       <strong>{friend.name}</strong>
                       <span className="sub">{friend.email}</span>
                     </div>
                   </div>
-                  <button className="btn-small" onClick={() => handleRemove(f.id)}>Kaldir</button>
+                  <button className="btn-secondary" onClick={() => handleRemove(f.id)}>Kaldir</button>
                 </div>
               );
             })}
