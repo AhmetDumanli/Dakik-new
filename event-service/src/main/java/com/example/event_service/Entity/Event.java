@@ -22,6 +22,8 @@ public class Event {
 
     private boolean isPublic = true;
 
+    private String description;
+
     //getters
     public Long getId() {
         return id;
@@ -78,5 +80,13 @@ public class Event {
 
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

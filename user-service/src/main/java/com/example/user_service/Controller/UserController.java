@@ -21,6 +21,11 @@ public class UserController {
         return userService.getAll();
     }
 
+    @GetMapping("/search")
+    public List<UserResponse> searchByName(@RequestParam String name) {
+        return userService.searchByName(name);
+    }
+
     @GetMapping("/{id}")
     public UserResponse getById(@PathVariable Long id) {
         return userService.getById(id);

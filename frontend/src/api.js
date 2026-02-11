@@ -87,6 +87,7 @@ export async function createEvent(data) {
       startTime: data.startTime,
       endTime: data.endTime,
       isPublic: data.isPublic !== undefined ? data.isPublic : true,
+      description: data.description || null,
     }),
   });
   if (!res.ok) throw new Error(await parseError(res));
@@ -200,10 +201,26 @@ export async function getPendingFriendRequests() {
   return res.json();
 }
 
+export async function checkCanView(userId, viewerId) {
+  const res = await fetch(`${BASE}/users/${userId}/can-view?viewerId=${viewerId}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) return false;
+  return res.json();
+}
+
 export async function removeFriendship(friendshipId) {
   const res = await fetch(`${BASE}/friendships/${friendshipId}`, {
     method: "DELETE",
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await parseError(res));
+}
+
+export async function searchUsers(name) {
+  const res = await fetch(`${BASE}/users/search?name=${encodeURIComponent(name)}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
 }

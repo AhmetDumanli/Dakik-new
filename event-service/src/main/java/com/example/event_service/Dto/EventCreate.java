@@ -17,6 +17,8 @@ public class EventCreate {
 
     private Boolean isPublic = true;
 
+    private String description;
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -39,5 +41,13 @@ public class EventCreate {
 
     public void setIsPublic(Boolean isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -6,6 +6,7 @@ import EventsPage from "./pages/EventsPage";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import ProfilePage from "./pages/ProfilePage";
 import FriendsPage from "./pages/FriendsPage";
+import UserProfilePage from "./pages/UserProfilePage";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
@@ -49,6 +50,14 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <FriendsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user/:id"
+            element={
+              <ProtectedRoute>
+                <UserProfilePage />
               </ProtectedRoute>
             }
           />

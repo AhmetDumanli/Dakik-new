@@ -56,6 +56,12 @@ public class UserService {
         return mapToResponse(updated);
     }
 
+    public List<UserResponse> searchByName(String name) {
+        return userRepository.findByNameContainingIgnoreCase(name).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     public boolean canViewUser(Long userId, Long viewerId) {
         if (userId.equals(viewerId)) return true;
 

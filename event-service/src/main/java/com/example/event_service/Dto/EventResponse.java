@@ -10,6 +10,7 @@ public class EventResponse {
     private LocalDateTime endTime;
     private boolean available;
     private boolean isPublic;
+    private String description;
 
     public Long getId() {
         return id;
@@ -59,5 +60,13 @@ public class EventResponse {
 
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

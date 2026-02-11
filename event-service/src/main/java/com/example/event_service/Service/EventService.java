@@ -52,6 +52,7 @@ public class EventService {
         event.setEndTime(request.getEndTime());
         event.setAvailable(true);
         event.setPublic(request.getIsPublic() != null ? request.getIsPublic() : true);
+        event.setDescription(request.getDescription());
 
         Event saved = eventRepository.save(event);
 
@@ -151,6 +152,7 @@ public class EventService {
         response.setEndTime(event.getEndTime());
         response.setAvailable(event.isAvailable());
         response.setPublic(event.isPublic());
+        response.setDescription(event.getDescription());
         return response;
     }
 }
