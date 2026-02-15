@@ -17,6 +17,13 @@ public class EventCreate {
 
     private Boolean isPublic = true;
 
+<<<<<<< Updated upstream
+=======
+    private String description;
+
+    private Integer maxParticipants;
+
+>>>>>>> Stashed changes
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -40,4 +47,23 @@ public class EventCreate {
     public void setIsPublic(Boolean isPublic) {
         this.isPublic = isPublic;
     }
+<<<<<<< Updated upstream
+=======
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+>>>>>>> Stashed changes
 }

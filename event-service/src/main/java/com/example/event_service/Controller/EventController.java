@@ -63,4 +63,9 @@ public class EventController {
     public void unlock(@PathVariable Long id) {
         eventService.unlockEvent(id);
     }
+
+    @PutMapping("/{id}/unbook")
+    public EventResponse unbook(@PathVariable Long id) {
+        return eventService.unbookEvent(id);
+    }
 }

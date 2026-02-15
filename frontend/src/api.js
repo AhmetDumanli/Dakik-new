@@ -87,6 +87,11 @@ export async function createEvent(data) {
       startTime: data.startTime,
       endTime: data.endTime,
       isPublic: data.isPublic !== undefined ? data.isPublic : true,
+<<<<<<< Updated upstream
+=======
+      description: data.description || null,
+      maxParticipants: data.maxParticipants || 1,
+>>>>>>> Stashed changes
     }),
   });
   if (!res.ok) throw new Error(await parseError(res));
@@ -207,3 +212,40 @@ export async function removeFriendship(friendshipId) {
   });
   if (!res.ok) throw new Error(await parseError(res));
 }
+<<<<<<< Updated upstream
+=======
+
+export async function approveAppointment(id) {
+  const res = await fetch(`${BASE}/appointments/${id}/approve`, {
+    method: "PUT",
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function rejectAppointment(id) {
+  const res = await fetch(`${BASE}/appointments/${id}/reject`, {
+    method: "PUT",
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function getAppointmentRequests() {
+  const res = await fetch(`${BASE}/appointments/requests`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+
+export async function searchUsers(name) {
+  const res = await fetch(`${BASE}/users/search?name=${encodeURIComponent(name)}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await parseError(res));
+  return res.json();
+}
+>>>>>>> Stashed changes

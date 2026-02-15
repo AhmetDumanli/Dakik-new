@@ -39,6 +39,7 @@ export default function FriendsPage() {
     }
   }
 
+<<<<<<< Updated upstream
   async function handleSendRequest(e) {
     e.preventDefault();
     setError("");
@@ -54,6 +55,8 @@ export default function FriendsPage() {
     }
   }
 
+=======
+>>>>>>> Stashed changes
   async function handleAccept(id) {
     setError("");
     setSuccess("");
@@ -127,6 +130,7 @@ export default function FriendsPage() {
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
 
+<<<<<<< Updated upstream
       <form onSubmit={handleSendRequest} className="form-card friend-add-form">
         <h3>Arkadas Ekle</h3>
         <div className="inline-form">
@@ -141,6 +145,8 @@ export default function FriendsPage() {
         </div>
       </form>
 
+=======
+>>>>>>> Stashed changes
       {pending.length > 0 && (
         <div className="friend-section">
           <h3 className="section-title">
@@ -149,9 +155,28 @@ export default function FriendsPage() {
           </h3>
           <div className="friend-list">
             {pending.map((req) => (
+<<<<<<< Updated upstream
               <div key={req.id} className="friend-card friend-card-pending">
                 <div className="friend-card-left">
                   <Avatar name={req.requester.name} photoUrl={req.requester.profilePhotoUrl} />
+=======
+              <div key={req.id} className="list-item">
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }} onClick={() => navigate(`/user/${req.requester.id}`)}>
+                  {req.requester.profilePhotoUrl ? (
+                    <img
+                      src={req.requester.profilePhotoUrl}
+                      alt=""
+                      style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <div style={{
+                      width: 40, height: 40, borderRadius: "50%", background: "#ddd",
+                      display: "flex", alignItems: "center", justifyContent: "center", color: "#888"
+                    }}>
+                      {req.requester.name?.charAt(0)?.toUpperCase()}
+                    </div>
+                  )}
+>>>>>>> Stashed changes
                   <div>
                     <strong>{req.requester.name}</strong>
                     <span className="sub">{req.requester.email}</span>
@@ -170,19 +195,42 @@ export default function FriendsPage() {
       <div className="friend-section">
         <h3 className="section-title">Arkadaslarim</h3>
         {friends.length === 0 ? (
+<<<<<<< Updated upstream
           <div className="empty-state">
             <div className="empty-state-icon">👥</div>
             <p>Henuz arkadasin yok.</p>
             <span className="sub">Yukaridaki alandan arkadas istegi gonderebilirsin.</span>
           </div>
+=======
+          <p className="empty">Henuz arkadasin yok. Navbar'dan kullanici arayarak arkadas istegi gonderebilirsin.</p>
+>>>>>>> Stashed changes
         ) : (
           <div className="friend-list">
             {friends.map((f) => {
               const friend = f.requester.id === user.id ? f.addressee : f.requester;
               return (
+<<<<<<< Updated upstream
                 <div key={f.id} className="friend-card">
                   <div className="friend-card-left">
                     <Avatar name={friend.name} photoUrl={friend.profilePhotoUrl} />
+=======
+                <div key={f.id} className="list-item">
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }} onClick={() => navigate(`/user/${friend.id}`)}>
+                    {friend.profilePhotoUrl ? (
+                      <img
+                        src={friend.profilePhotoUrl}
+                        alt=""
+                        style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: 40, height: 40, borderRadius: "50%", background: "#ddd",
+                        display: "flex", alignItems: "center", justifyContent: "center", color: "#888"
+                      }}>
+                        {friend.name?.charAt(0)?.toUpperCase()}
+                      </div>
+                    )}
+>>>>>>> Stashed changes
                     <div>
                       <strong>{friend.name}</strong>
                       <span className="sub">{friend.email}</span>

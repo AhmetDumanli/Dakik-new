@@ -2,12 +2,25 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { createEvent, getEventsByUser, getPublicEvents, createAppointment, getUserByName } from "../api";
 
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const day = d.getDate();
+  const month = d.toLocaleString("tr-TR", { month: "short" }).toUpperCase();
+  const time = d.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+  return { day, month, time };
+}
+
 export default function EventsPage() {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
+<<<<<<< Updated upstream
   const [form, setForm] = useState({ startTime: "", endTime: "", isPublic: true });
+=======
+  const [form, setForm] = useState({ startTime: "", endTime: "", isPublic: true, description: "", maxParticipants: 1 });
+>>>>>>> Stashed changes
   const [searchName, setSearchName] = useState("");
   const [activeTab, setActiveTab] = useState("public");
+  const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -51,8 +64,15 @@ export default function EventsPage() {
         startTime: form.startTime,
         endTime: form.endTime,
         isPublic: form.isPublic,
+<<<<<<< Updated upstream
       });
       setForm({ startTime: "", endTime: "", isPublic: true });
+=======
+        description: form.description,
+        maxParticipants: parseInt(form.maxParticipants) || 1,
+      });
+      setForm({ startTime: "", endTime: "", isPublic: true, description: "", maxParticipants: 1 });
+>>>>>>> Stashed changes
       setShowForm(false);
       setSuccess("Etkinlik olusturuldu!");
       if (activeTab === "my") loadUserEvents(user.id);
@@ -63,12 +83,20 @@ export default function EventsPage() {
     }
   };
 
-  const handleBook = async (eventId) => {
+  const handleBook = async (eventId, isPublicEvent) => {
     setError("");
     setSuccess("");
     try {
       await createAppointment(eventId);
+<<<<<<< Updated upstream
       setSuccess("Randevu olusturuldu!");
+=======
+      if (isPublicEvent) {
+        setSuccess(`Randevu olusturuldu! (Event #${eventId})`);
+      } else {
+        setSuccess(`Randevu istegi gonderildi! Etkinlik sahibinin onayi bekleniyor.`);
+      }
+>>>>>>> Stashed changes
       if (activeTab === "public") loadPublicEvents();
       else if (activeTab === "my") loadUserEvents(user.id);
       else if (searchName) handleSearch();
@@ -109,6 +137,15 @@ export default function EventsPage() {
         </button>
       </div>
 
+<<<<<<< Updated upstream
+=======
+      <div style={{ marginBottom: "1rem" }}>
+        <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
+          {showForm ? "Formu Kapat" : "+ Yeni Etkinlik"}
+        </button>
+      </div>
+
+>>>>>>> Stashed changes
       {showForm && (
         <form onSubmit={handleCreate} className="form-card event-form">
           <h3>Yeni Etkinlik</h3>
@@ -132,6 +169,43 @@ export default function EventsPage() {
               />
             </div>
           </div>
+<<<<<<< Updated upstream
+=======
+          <div className="event-form-field" style={{ marginBottom: "0.5rem" }}>
+            <label>Aciklama (opsiyonel)</label>
+            <textarea
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              placeholder="Etkinlik hakkinda kisa bir aciklama..."
+              rows={2}
+              style={{
+                width: "100%",
+                padding: "0.6rem 0.8rem",
+                border: "1px solid #e0e0e0",
+                borderRadius: "8px",
+                fontSize: "0.85rem",
+                fontFamily: "inherit",
+                resize: "vertical",
+              }}
+            />
+          </div>
+          <div className="event-form-field" style={{ marginBottom: "0.5rem" }}>
+            <label>Maks. Katilimci</label>
+            <input
+              type="number"
+              min="1"
+              value={form.maxParticipants}
+              onChange={(e) => setForm({ ...form, maxParticipants: e.target.value })}
+              style={{
+                width: "80px",
+                padding: "0.4rem 0.6rem",
+                border: "1px solid #e0e0e0",
+                borderRadius: "8px",
+                fontSize: "0.85rem",
+              }}
+            />
+          </div>
+>>>>>>> Stashed changes
           <div className="event-form-footer">
             <label className="profile-toggle-label">
               <span>Herkese Acik</span>
@@ -198,6 +272,9 @@ export default function EventsPage() {
                 <div className="event-card-meta">
                   Event #{ev.id}
                   {!ev.public && <span className="badge">Gizli</span>}
+                  <span className="badge" style={{ marginLeft: "0.3rem" }}>
+                    {ev.currentParticipants}/{ev.maxParticipants} Kisi
+                  </span>
                 </div>
               </div>
               <div className="event-card-action">
@@ -205,8 +282,12 @@ export default function EventsPage() {
                   <span className="badge badge-red">Dolu</span>
                 ) : user && ev.userId === user.id ? (
                   <span className="badge badge-green">Kendi Etkinligin</span>
+                ) : ev.locked ? (
+                  <span className="badge">Isleniyor...</span>
                 ) : (
-                  <button className="btn-book" onClick={() => handleBook(ev.id)}>Randevu Al</button>
+                  <button className="btn-book" onClick={() => handleBook(ev.id, ev.public)}>
+                    {ev.public ? "Randevu Al" : "Istek Gonder"}
+                  </button>
                 )}
               </div>
             </div>

@@ -8,6 +8,7 @@ public class AppointmentResponse {
     private Long id;
     private Long bookedBy;
     private Long eventId;
+    private Long eventOwnerId;
     private Appointment.AppointmentStatus status;
     private LocalDateTime createdAt;
 
@@ -49,5 +50,13 @@ public class AppointmentResponse {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getEventOwnerId() {
+        return eventOwnerId;
+    }
+
+    public void setEventOwnerId(Long eventOwnerId) {
+        this.eventOwnerId = eventOwnerId;
     }
 }

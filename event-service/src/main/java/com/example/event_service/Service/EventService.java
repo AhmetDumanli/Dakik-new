@@ -52,6 +52,11 @@ public class EventService {
         event.setEndTime(request.getEndTime());
         event.setAvailable(true);
         event.setPublic(request.getIsPublic() != null ? request.getIsPublic() : true);
+<<<<<<< Updated upstream
+=======
+        event.setDescription(request.getDescription());
+        event.setMaxParticipants(request.getMaxParticipants() != null ? request.getMaxParticipants() : 1);
+>>>>>>> Stashed changes
 
         Event saved = eventRepository.save(event);
 
@@ -82,7 +87,7 @@ public class EventService {
             throw new EventException("Error checking user visibility");
         }
 
-        return eventRepository.findByUserIdAndIsPublicTrueAndAvailableTrue(userId)
+        return eventRepository.findByUserId(userId)
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -127,7 +132,11 @@ public class EventService {
             throw new EventAlreadyBookedException(id);
         }
 
-        event.setAvailable(false);
+        event.setCurrentParticipants(event.getCurrentParticipants() + 1);
+        if (event.getCurrentParticipants() >= event.getMaxParticipants()) {
+            event.setAvailable(false);
+        }
+        event.setLocked(false);
         eventRepository.save(event);
         return mapToResponse(event);
     }
@@ -138,7 +147,21 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException(id));
 
         event.setLocked(false);
+        if (event.getCurrentParticipants() < event.getMaxParticipants()) {
+            event.setAvailable(true);
+        }
+        eventRepository.save(event);
+        return mapToResponse(event);
+    }
+
+    @Transactional
+    public EventResponse unbookEvent(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        event.setCurrentParticipants(event.getCurrentParticipants() - 1);
         event.setAvailable(true);
+        event.setLocked(false);
         eventRepository.save(event);
         return mapToResponse(event);
     }
@@ -151,6 +174,13 @@ public class EventService {
         response.setEndTime(event.getEndTime());
         response.setAvailable(event.isAvailable());
         response.setPublic(event.isPublic());
+<<<<<<< Updated upstream
+=======
+        response.setDescription(event.getDescription());
+        response.setMaxParticipants(event.getMaxParticipants());
+        response.setCurrentParticipants(event.getCurrentParticipants());
+        response.setLocked(event.isLocked());
+>>>>>>> Stashed changes
         return response;
     }
 }

@@ -10,6 +10,13 @@ public class EventResponse {
     private LocalDateTime endTime;
     private boolean available;
     private boolean isPublic;
+<<<<<<< Updated upstream
+=======
+    private String description;
+    private int maxParticipants;
+    private int currentParticipants;
+    private boolean locked;
+>>>>>>> Stashed changes
 
     public Long getId() {
         return id;
@@ -60,4 +67,39 @@ public class EventResponse {
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
+<<<<<<< Updated upstream
+=======
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(int maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+    public int getCurrentParticipants() {
+        return currentParticipants;
+    }
+
+    public void setCurrentParticipants(int currentParticipants) {
+        this.currentParticipants = currentParticipants;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+>>>>>>> Stashed changes
 }

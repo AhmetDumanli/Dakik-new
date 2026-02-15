@@ -984,6 +984,66 @@ body {
   gap: 0.2rem;
 }
 
+<<<<<<< Updated upstream
+=======
+.sub {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  background: #e3f2fd;
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.badge-green {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-red {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.badge-yellow {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+/* Messages */
+.error {
+  color: #c62828;
+  background: #ffebee;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.success {
+  color: #2e7d32;
+  background: #e8f5e9;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.warning {
+  color: #e65100;
+  background: #fff3e0;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+>>>>>>> Stashed changes
 .empty {
   color: #999;
   font-size: 0.9rem;

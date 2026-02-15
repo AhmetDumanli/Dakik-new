@@ -10,4 +10,8 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
 
     List<Appointment> findByBookedBy(Long bookedBy);
 
+    List<Appointment> findByEventOwnerIdAndStatus(Long eventOwnerId, Appointment.AppointmentStatus status);
+
+    List<Appointment> findByEventIdAndStatusIn(Long eventId, List<Appointment.AppointmentStatus> statuses);
+
 }

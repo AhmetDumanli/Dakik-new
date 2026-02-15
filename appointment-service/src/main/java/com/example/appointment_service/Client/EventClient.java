@@ -20,5 +20,8 @@ public interface EventClient {
 
     @PutMapping("/events/{id}/unlock")
     void unlock(@PathVariable Long id);
+
+    @PutMapping("/events/{id}/unbook")
+    EventResponse unbook(@PathVariable Long id);
 }
 

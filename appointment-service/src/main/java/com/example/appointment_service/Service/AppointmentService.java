@@ -58,30 +58,68 @@ public class AppointmentService {
         appointment.setBookedBy(bookedBy);
         appointment.setCreatedAt(LocalDateTime.now());
         appointment.setStatus(Appointment.AppointmentStatus.PENDING);
+        appointment.setEventOwnerId(event.getUserId());
         Appointment saved = repo.save(appointment);
 
-        AppointmentResponse response = new AppointmentResponse();
-        response.setId(saved.getId());
-        response.setEventId(saved.getEventId());
-        response.setBookedBy(saved.getBookedBy());
-        response.setCreatedAt(saved.getCreatedAt());
-
-        try {
-            eventClient.book(event.getId());
-
-            saved.setStatus(Appointment.AppointmentStatus.BOOKED);
-            repo.save(saved);
-            response.setStatus(saved.getStatus());
-            return response;
-        } catch (Exception e) {
-            eventClient.unlock(request.getEventId());
-
-            saved.setStatus(Appointment.AppointmentStatus.FAILED);
-            repo.save(saved);
-            response.setStatus(saved.getStatus());
-
-            throw e;
+        if (event.isPublic()) {
+            try {
+                eventClient.book(event.getId());
+                saved.setStatus(Appointment.AppointmentStatus.BOOKED);
+                repo.save(saved);
+            } catch (Exception e) {
+                eventClient.unlock(request.getEventId());
+                saved.setStatus(Appointment.AppointmentStatus.FAILED);
+                repo.save(saved);
+                throw e;
+            }
         }
+
+        return mapToResponse(saved);
+    }
+
+    @Transactional
+    public AppointmentResponse approve(Long appointmentId, Long ownerId) {
+        Appointment appointment = repo.findById(appointmentId)
+                .orElseThrow(() -> new AppointmentNotFoundException(appointmentId));
+
+        if (!appointment.getEventOwnerId().equals(ownerId)) {
+            throw new AppointmentForbiddenException("You are not the owner of this event");
+        }
+
+        if (appointment.getStatus() != Appointment.AppointmentStatus.PENDING) {
+            throw new AppointmentException("Appointment is not in PENDING status");
+        }
+
+        eventClient.book(appointment.getEventId());
+        appointment.setStatus(Appointment.AppointmentStatus.BOOKED);
+        Appointment saved = repo.save(appointment);
+        return mapToResponse(saved);
+    }
+
+    @Transactional
+    public AppointmentResponse reject(Long appointmentId, Long ownerId) {
+        Appointment appointment = repo.findById(appointmentId)
+                .orElseThrow(() -> new AppointmentNotFoundException(appointmentId));
+
+        if (!appointment.getEventOwnerId().equals(ownerId)) {
+            throw new AppointmentForbiddenException("You are not the owner of this event");
+        }
+
+        if (appointment.getStatus() != Appointment.AppointmentStatus.PENDING) {
+            throw new AppointmentException("Appointment is not in PENDING status");
+        }
+
+        eventClient.unlock(appointment.getEventId());
+        appointment.setStatus(Appointment.AppointmentStatus.REJECTED);
+        Appointment saved = repo.save(appointment);
+        return mapToResponse(saved);
+    }
+
+    public List<AppointmentResponse> getRequests(Long ownerId) {
+        return repo.findByEventOwnerIdAndStatus(ownerId, Appointment.AppointmentStatus.PENDING)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     public List<AppointmentResponse> getAppointments(Long bookedBy) {
@@ -104,7 +142,11 @@ public class AppointmentService {
             throw new AppointmentException("Appointment already cancelled");
         }
 
-        eventClient.unlock(appointment.getEventId());
+        if (appointment.getStatus() == Appointment.AppointmentStatus.BOOKED) {
+            eventClient.unbook(appointment.getEventId());
+        } else {
+            eventClient.unlock(appointment.getEventId());
+        }
 
         appointment.setStatus(Appointment.AppointmentStatus.CANCELLED);
 
@@ -120,6 +162,7 @@ public class AppointmentService {
         appointmentResponse.setBookedBy(appointment.getBookedBy());
         appointmentResponse.setCreatedAt(appointment.getCreatedAt());
         appointmentResponse.setStatus(appointment.getStatus());
+        appointmentResponse.setEventOwnerId(appointment.getEventOwnerId());
 
         return appointmentResponse;
     }

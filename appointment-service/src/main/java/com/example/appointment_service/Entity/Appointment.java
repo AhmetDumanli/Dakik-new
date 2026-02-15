@@ -12,6 +12,7 @@ public class Appointment {
 
     private Long eventId;
     private Long bookedBy;
+    private Long eventOwnerId;
 
     private LocalDateTime createdAt;
 
@@ -22,7 +23,8 @@ public class Appointment {
         PENDING,
         BOOKED,
         CANCELLED,
-        FAILED
+        FAILED,
+        REJECTED
     }
 
     public void setId(Long id) {
@@ -63,5 +65,13 @@ public class Appointment {
 
     public AppointmentStatus getStatus() {
         return status;
+    }
+
+    public Long getEventOwnerId() {
+        return eventOwnerId;
+    }
+
+    public void setEventOwnerId(Long eventOwnerId) {
+        this.eventOwnerId = eventOwnerId;
     }
 }

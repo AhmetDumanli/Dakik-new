@@ -38,4 +38,23 @@ public class AppointmentController {
             @PathVariable Long id) {
         return service.cancel(id, userId);
     }
+
+    @PutMapping("/{id}/approve")
+    public AppointmentResponse approve(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long id) {
+        return service.approve(id, userId);
+    }
+
+    @PutMapping("/{id}/reject")
+    public AppointmentResponse reject(
+            @RequestHeader("X-User-Id") Long userId,
+            @PathVariable Long id) {
+        return service.reject(id, userId);
+    }
+
+    @GetMapping("/requests")
+    public List<AppointmentResponse> getRequests(@RequestHeader("X-User-Id") Long userId) {
+        return service.getRequests(userId);
+    }
 }
