@@ -52,11 +52,8 @@ public class EventService {
         event.setEndTime(request.getEndTime());
         event.setAvailable(true);
         event.setPublic(request.getIsPublic() != null ? request.getIsPublic() : true);
-<<<<<<< Updated upstream
-=======
         event.setDescription(request.getDescription());
         event.setMaxParticipants(request.getMaxParticipants() != null ? request.getMaxParticipants() : 1);
->>>>>>> Stashed changes
 
         Event saved = eventRepository.save(event);
 
@@ -174,13 +171,10 @@ public class EventService {
         response.setEndTime(event.getEndTime());
         response.setAvailable(event.isAvailable());
         response.setPublic(event.isPublic());
-<<<<<<< Updated upstream
-=======
         response.setDescription(event.getDescription());
         response.setMaxParticipants(event.getMaxParticipants());
         response.setCurrentParticipants(event.getCurrentParticipants());
         response.setLocked(event.isLocked());
->>>>>>> Stashed changes
         return response;
     }
 }
